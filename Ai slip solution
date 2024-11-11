@@ -1,0 +1,957 @@
+Slip no 2
+
+Q1]   import calendar
+
+def generate_calendar(year, month):
+    cal = calendar.monthcalendar(year, month)
+    print(calendar.month_name[month], year)
+    print("Mo Tu We Th Fr Sa Su")
+
+    for week in cal:
+        for day in week:
+            if day == 0:
+                print("   ", end=" ")
+            else:
+                print(f"{day:2d} ", end=" ")
+        print()
+
+year = int(input("Enter year: "))
+month = int(input("Enter month: "))
+ 
+generate_calendar(year, month)
+
+
+***Q2]
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def dfs(self, current_node, goal_node, visited, path):
+        visited.add(current_node)
+        path.append(current_node)
+
+        if current_node == goal_node:
+            return path
+
+        for neighbor in self.graph.get(current_node, []):
+            if neighbor not in visited:
+                result = self.dfs(neighbor, goal_node, visited, path)
+                if result:
+                    return result
+
+        path.pop()  # Backtrack if the goal is not found along this path
+        return None
+
+graph = Graph()
+graph.add_edge(1, 2)
+graph.add_edge(1, 3)
+graph.add_edge(2, 4)
+graph.add_edge(2, 5)
+graph.add_edge(3, 6)
+graph.add_edge(3, 7)
+
+initial_node = 1
+goal_node = 7
+
+visited_nodes = set()
+result_path = graph.dfs(initial_node, goal_node, visited_nodes, [])
+
+if result_path:
+    print(f"Path from {initial_node} to {goal_node}: {result_path}")
+else:
+    print(f"No path from {initial_node} to {goal_node}")
+
+Slip no 3
+
+Q3]  import string
+
+def remove_punctuation(input_string):
+  
+punctuation_set = set(string.punctuation)
+
+result_string = ''.join(char for char in input_string if char not in punctuation_set)
+
+return result_string
+
+input_string = "Hello, this is an example string! It contains punctuation."
+result = remove_punctuation(input_string)
+
+print(f"Original string: {input_string}")
+print(f"String without punctuation: {result}")
+
+
+ Q2]  
+class Graph:
+def __init__(self):
+        self.graph = {}
+
+def add_edge(self, u, v):
+if u not in self.graph:
+ self.graph[u]=[]
+ self.graph[u].append(v)
+
+ def dfs(self, current_node, goal_node, visited, path):
+        visited.add(current_node)
+path.append(current_node)
+if current_node ==goal_node:
+ return path
+
+  for neighbor in self.graph.get(current_node, []):
+  if neighbor not in visited:
+  result =self.dfs(neighbor, goal_node, visited, path)
+    if result:
+    return result
+path.pop()  
+
+graph = Graph()
+graph.add_edge(1, 2)
+graph.add_edge(1, 3)
+graph.add_edge(2, 4)
+graph.add_edge(2, 5)
+graph.add_edge(3, 6)
+graph.add_edge(3, 7)
+
+initial_node = 2
+goal_node = 7
+
+visited_nodes = set()
+result_path = graph.dfs(initial_node, goal_node, visited_nodes, [])
+
+if result_path:
+    print(f"Path from {initial_node} to {goal_node}: {result_path}")
+else:
+    print(f"No path from {initial_node} to {goal_node}")
+
+Slip no 4
+
+Q1]
+
+import random
+def choose_word():
+    words = ["python", "hangman", "programming", "developer", "computer", "science"]
+  return random.choice(words)
+
+def display_word(word, guessed_letters):
+ display = ""
+    for letter in word:
+        if letter in guessed_letters:
+   display += letter
+ else:
+display += "_"
+return display
+def hangman():
+
+ secret_word = choose word()
+   guessed_letters = set()
+    attempts = 6
+
+print("Welcome to Hangman!")
+    print(display_word(secret_word, guessed_letters))
+while attempts > 0:
+   guess = input("Guess a letter: ").lower() 
+
+ if len(guess) != 1 or not guess.isalpha():
+   print("Please enter a single alphabet.")
+            continue
+
+        if guess in guessed_letters:
+  
+print("You already guessed that letter. Try again.")
+            continue
+
+    guessed_letters.add(guess)
+
+if guess not in secret_word:
+   attempts -= 1
+ print(f"Wrong guess! Attempts left: {attempts}")
+   else:
+  print("Correct guess!")
+
+current_display = display_word(secret_word, guessed_letters)
+        print(current_display)
+
+if "_" not in current_display:
+            print("Congratulations! You guessed the word!")
+            break
+if attempts == 0:
+  print(f"Sorry, you ran out of attempts. The word was: {secret_word}")
+hangman()
+
+***
+]   from collections import deque
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def bfs(self, start, goal):
+        visited = set()
+        queue = deque([start])
+        parent = {}
+
+        while queue:
+            current_node = queue.popleft()
+
+            if current_node not in visited:
+                visited.add(current_node)
+
+                if current_node == goal:
+                    return self.reconstruct_path(start, goal, parent)
+
+                for neighbor in self.graph.get(current_node, []):
+                    if neighbor not in visited and neighbor not in queue:
+                        parent[neighbor] = current_node
+                        queue.append(neighbor)
+
+        return None  # Goal node not reachable
+
+    def reconstruct_path(self, start, goal, parent):
+        path = [goal]
+        current_node = goal
+
+        while current_node != start:
+            current_node = parent[current_node]
+            path.insert(0, current_node)
+
+        return path
+
+# Create the graph
+graph = Graph()
+graph.add_edge(1, 2)
+graph.add_edge(1, 3)
+graph.add_edge(2, 4)
+graph.add_edge(2, 5)
+graph.add_edge(3, 6)
+graph.add_edge(3, 7)
+graph.add_edge(4, 8)
+
+# Specify the initial and goal nodes
+initial_node = 1
+goal_node = 8
+
+# Perform BFS
+result_path = graph.bfs(initial_node, goal_node)
+
+# Display the result
+if result_path:
+    print(f"Path from {initial_node} to {goal_node}: {result_path}")
+else:
+    print(f"No path from {initial_node} to {goal_node}")
+
+#Slip no 5
+
+Q1]
+import nltk
+from nltk.corpus import wordnet
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+
+# Download NLTK resources (if not already downloaded)
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+
+def get_wordnet_pos(tag):
+    if tag.startswith('N'):
+        return wordnet.NOUN
+    elif tag.startswith('V'):
+        return wordnet.VERB
+    elif tag.startswith('R'):
+        return wordnet.ADV
+    elif tag.startswith('J'):
+        return wordnet.ADJ
+    else:
+        return wordnet.NOUN  # Default to noun if the part of speech is not recognized
+
+def lemmatize_text(text):
+    lemmatizer = WordNetLemmatizer()
+
+    # Tokenize the text into words
+    words = word_tokenize(text)
+
+    # Get part-of-speech tags for each word
+    pos_tags = nltk.pos_tag(words)
+
+    # Lemmatize each word based on its part-of-speech
+    lemmatized_words = [lemmatizer.lemmatize(word, pos=get_wordnet_pos(tag)) for word, tag in pos_tags]
+
+    # Join the lemmatized words into a sentence
+    lemmatized_text = ' '.join(lemmatized_words)
+
+    return lemmatized_text
+
+# Example usage
+input_text = "The cats are playing in the garden and jumping on the trees."
+lemmatized_text = lemmatize_text(input_text)
+
+print("Original text:", input_text)
+print("Lemmatized text:", lemmatized_text)
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+Q2] 
+
+from collections import deque
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def bfs(self, start, goal):
+        visited = set()
+        queue = deque([(start, [start])])
+
+        while queue:
+            current_node, path = queue.popleft()
+
+            if current_node not in visited:
+                visited.add(current_node)
+
+                if current_node == goal:
+                    return path
+
+                for neighbor in self.graph.get(current_node, []):
+                    if neighbor not in visited:
+                        queue.append((neighbor, path + [neighbor]))
+
+        return None  # Goal node not reachable
+
+# Create the graph
+graph = Graph()
+graph.add_edge(1, 2)
+graph.add_edge(1, 3)
+graph.add_edge(2, 4)
+graph.add_edge(2, 5)
+graph.add_edge(3, 6)
+graph.add_edge(3, 7)
+graph.add_edge(4, 8)
+
+# Specify the initial and goal nodes
+initial_node = 1
+goal_node = 8
+
+# Perform BFS
+result_path = graph.bfs(initial_node, goal_node)
+
+# Display the result
+if result_path:
+    print(f"Path from {initial_node} to {goal_node}: {result_path}")
+else:
+    print(f"No path from {initial_node} to {goal_node}")
+
+
+@Slip no 6
+
+Q1]
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('stopwords')
+nltk.download('punkt')
+
+def remove_stopwords(text):
+    stop_words = set(stopwords.words('english'))
+    words = word_tokenize(text)
+    filtered_words = [word for word in words if word.lower() not in stop_words]
+    return ' '.join(filtered_words)
+
+def main():
+    # Read the passage from a text file
+    file_path = 'your_text_file.txt'  # Replace with the actual file path
+    with open(file_path, 'r', encoding='utf-8') as file:
+        passage = file.read()
+
+    # Remove stop words from the passage
+    processed_passage = remove_stopwords(passage)
+
+    # Display the result
+    print("Original Passage:")
+    print(passage)
+
+    print("\nProcessed Passage (without stop words):")
+    print(processed_passage)
+
+if __name__ == "__main__":
+    main()
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+Q2]
+
+from collections import deque
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def bfs(self, start, goal):
+        visited = set()
+        queue = deque([(start, [start])])
+
+        while queue:
+            current_node, path = queue.popleft()
+
+            if current_node not in visited:
+                visited.add(current_node)
+
+                if current_node == goal:
+                    return path
+
+                for neighbor in self.graph.get(current_node, []):
+                    if neighbor not in visited:
+                        queue.append((neighbor, path + [neighbor]))
+
+        return None  # Goal node not reachable
+
+# Create the graph
+graph = Graph()
+graph.add_edge(1, 2)
+graph.add_edge(1, 3)
+graph.add_edge(2, 4)
+graph.add_edge(2, 5)
+graph.add_edge(3, 6)
+graph.add_edge(3, 7)
+graph.add_edge(4, 8)
+
+# Specify the initial and goal nodes
+initial_node = 1
+goal_node = 8
+
+# Perform BFS
+result_path = graph.bfs(initial_node, goal_node)
+
+# Display the result
+if result_path:
+    print(f"Path from {initial_node} to {goal_node}: {result_path}")
+else:
+    print(f"No path from {initial_node} to {goal_node}")
+
+
+@Slip no 7
+
+Q1]
+
+import math
+
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def is_winner(board, player):
+    # Check rows, columns, and diagonals for a win
+    for i in range(3):
+        if all(board[i][j] == player for j in range(3)) or all(board[j][i] == player for j in range(3)):
+            return True
+    if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+        return True
+    return False
+
+def is_board_full(board):
+    return all(all(cell != ' ' for cell in row) for row in board)
+
+def evaluate(board):
+    if is_winner(board, 'X'):
+        return 1
+    elif is_winner(board, 'O'):
+        return -1
+    elif is_board_full(board):
+        return 0
+    return None
+
+def minimax(board, depth, maximizing_player, alpha, beta):
+    score = evaluate(board)
+
+    if score is not None:
+        return score
+
+    if maximizing_player:
+        max_eval = -math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'X'
+                    eval = minimax(board, depth + 1, False, alpha, beta)
+                    board[i][j] = ' '
+                    max_eval = max(max_eval, eval)
+                    alpha = max(alpha, eval)
+                    if beta <= alpha:
+                        break
+        return max_eval
+    else:
+        min_eval = math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'O'
+                    eval = minimax(board, depth + 1, True, alpha, beta)
+                    board[i][j] = ' '
+                    min_eval = min(min_eval, eval)
+                    beta = min(beta, eval)
+                    if beta <= alpha:
+                        break
+        return min_eval
+
+def find_best_move(board):
+    best_val = -math.inf
+    best_move = (-1, -1)
+
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == ' ':
+                board[i][j] = 'X'
+                move_val = minimax(board, 0, False, -math.inf, math.inf)
+                board[i][j] = ' '
+                if move_val > best_val:
+                    best_move = (i, j)
+                    best_val = move_val
+
+    return best_move
+
+def main():
+    board = [[' ' for _ in range(3)] for _ in range(3)]
+    player_turn = True
+
+    while True:
+        print_board(board)
+
+        if player_turn:
+            row = int(input("Enter row (0, 1, or 2): "))
+            col = int(input("Enter column (0, 1, or 2): "))
+            if board[row][col] == ' ':
+                board[row][col] = 'O'
+            else:
+                print("Cell already occupied. Try again.")
+                continue
+        else:
+            best_move = find_best_move(board)
+            row, col = best_move
+            board[row][col] = 'X'
+
+        if is_winner(board, 'O'):
+            print("You win!")
+            break
+        elif is_winner(board, 'X'):
+            print("Computer wins!")
+            break
+        elif is_board_full(board):
+            print("It's a draw!")
+            break
+
+        player_turn = not player_turn
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+Q2] 
+
+import nltk
+from nltk.chat.util import Chat, reflections
+
+nltk.download('nltk_test')
+nltk.download('punkt')
+
+# Define responses for the chatbot
+responses = {
+    "hi": "Hello!",
+    "how are you": "I'm doing well, thank you.",
+    "what's your name": "I'm a simple chatbot.",
+    "bye": "Goodbye!",
+}
+
+# Define patterns for the chatbot
+patterns = [
+    (r"(.*)hi(.*)", ["Hi there!", "Hello!"]),
+    (r"how are you(.*)", ["I'm good, how about you?", "I'm doing well, thank you."]),
+    (r"what(\'|â€™)?s your name(.*)", ["I'm a simple chatbot.", "You can call me Chatbot."]),
+    (r"bye(.*)", ["Goodbye!", "See you later!"]),
+]
+
+# Create a simple chatbot
+chatbot = Chat(patterns, responses)
+
+# Start the chat
+print("Hello! I'm a simple chatbot. Type 'bye' to exit.")
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == 'bye':
+        print("Chatbot: Goodbye!")
+        break
+    else:
+        print("Chatbot:", chatbot.respond(user_input))
+
+
+
+Slip no 8
+
+Q1]
+
+
+def count_upper_lower(string):
+    upper_count = 0
+    lower_count = 0
+
+    for char in string:
+        if char.isupper():
+            upper_count += 1
+        elif char.islower():
+            lower_count += 1
+
+    return upper_count, lower_count
+
+# Accept a string from the user
+input_string = input("Enter a string: ")
+
+# Call the function to count upper and lower case letters
+upper, lower = count_upper_lower(input_string)
+
+# Display the result
+print(f"Number of uppercase letters: {upper}")
+print(f"Number of lowercase letters: {lower}")
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+
+
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def check_winner(board):
+    # Check rows
+    for row in board:
+        if all(cell == 'X' for cell in row) or all(cell == 'O' for cell in row):
+            return True
+
+    # Check columns
+    for col in range(3):
+        if all(row[col] == 'X' for row in board) or all(row[col] == 'O' for row in board):
+            return True
+
+    # Check diagonals
+    if all(board[i][i] == 'X' for i in range(3)) or all(board[i][2 - i] == 'X' for i in range(3)):
+        return True
+    if all(board[i][i] == 'O' for i in range(3)) or all(board[i][2 - i] == 'O' for i in range(3)):
+        return True
+
+    return False
+
+def check_tie(board):
+    return all(cell != ' ' for row in board for cell in row)
+
+def play_tic_tac_toe():
+    board = [[' ' for _ in range(3)] for _ in range(3)]
+    current_player = 'X'
+
+    print("Welcome to Tic-Tac-Toe!")
+    print_board(board)
+
+    while True:
+        row = int(input(f"Player {current_player}, enter row (0, 1, or 2): "))
+        col = int(input(f"Player {current_player}, enter column (0, 1, or 2): "))
+
+        if board[row][col] == ' ':
+            board[row][col] = current_player
+            print_board(board)
+
+            if check_winner(board):
+                print(f"Player {current_player} wins!")
+                break
+            elif check_tie(board):
+                print("It's a tie!")
+                break
+
+            current_player = 'O' if current_player == 'X' else 'X'
+        else:
+            print("Cell already occupied. Try again.")
+
+if __name__ == "__main__":
+    play_tic_tac_toe()
+
+
+
+Slip no 9
+
+Q1]
+
+from heapq import heappush, heappop
+
+class PuzzleState:
+    def __init__(self, board, parent=None, move=None, depth=0):
+        self.board = board
+        self.parent = parent
+        self.move = move
+        self.depth = depth
+        self.cost = self.calculate_cost()
+
+    def __lt__(self, other):
+        return self.cost < other.cost
+
+    def __eq__(self, other):
+        return self.board == other.board
+
+    def __hash__(self):
+        return hash(str(self.board))
+
+    def calculate_cost(self):
+        # Heuristic: Manhattan distance
+        cost = 0
+        goal_state = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] != 0:
+                    goal_row, goal_col = divmod(self.board[i][j] - 1, 3)
+                    cost += abs(i - goal_row) + abs(j - goal_col)
+
+        return cost + self.depth
+
+    def get_neighbors(self):
+        neighbors = []
+        zero_row, zero_col = next((i, j) for i, row in enumerate(self.board) for j, val in enumerate(row) if val == 0)
+
+        for i, j in [(zero_row + 1, zero_col), (zero_row - 1, zero_col), (zero_row, zero_col + 1), (zero_row, zero_col - 1)]:
+            if 0 <= i < 3 and 0 <= j < 3:
+                new_board = [row.copy() for row in self.board]
+                new_board[zero_row][zero_col], new_board[i][j] = new_board[i][j], new_board[zero_row][zero_col]
+                neighbors.append(PuzzleState(new_board, parent=self, move=(zero_row, zero_col)))
+
+        return neighbors
+
+def a_star_search(initial_state):
+    open_set = [initial_state]
+    closed_set = set()
+
+    while open_set:
+        current_state = heappop(open_set)
+
+        if current_state.board == [[1, 2, 3], [4, 5, 6], [7, 8, 0]]:
+            return reconstruct_path(current_state)
+
+        closed_set.add(current_state)
+
+        for neighbor in current_state.get_neighbors():
+            if neighbor not in closed_set:
+                if neighbor not in open_set or current_state.depth + 1 < neighbor.depth:
+                    neighbor.depth = current_state.depth + 1
+                    heappush(open_set, neighbor)
+
+    return None
+
+def reconstruct_path(final_state):
+    path = []
+    current_state = final_state
+    while current_state:
+        path.append((current_state.move[0], current_state.move[1]))
+        current_state = current_state.parent
+    return path[::-1]
+
+def print_solution(path):
+    for move in path:
+        print(f"Move 0: {move}")
+
+if __name__ == "__main__":
+    initial_board = [[2, 8, 3], [1, 6, 4], [7, 0, 5]]
+    initial_state = PuzzleState(initial_board)
+    solution_path = a_star_search(initial_state)
+
+    if solution_path:
+        print_solution(solution_path)
+    else:
+        print("No solution found.")
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+
+def water_jug_problem(capacity_jug_5, capacity_jug_7, target):
+    state_visited = set()
+
+    def dfs(jug_5, jug_7):
+        if jug_5 == target or jug_7 == target:
+            return True
+
+        state = (jug_5, jug_7)
+        if state in state_visited:
+            return False
+        state_visited.add(state)
+
+        # Fill jug_5
+        if jug_5 < capacity_jug_5:
+            if dfs(capacity_jug_5, jug_7):
+                print(f"Fill 5-gallon jug\t\t: ({capacity_jug_5}, {jug_7})")
+                return True
+
+        # Fill jug_7
+        if jug_7 < capacity_jug_7:
+            if dfs(jug_5, capacity_jug_7):
+                print(f"Fill 7-gallon jug\t\t: ({jug_5}, {capacity_jug_7})")
+                return True
+
+        # Pour from jug_7 to jug_5
+        if jug_7 > 0 and jug_5 < capacity_jug_5:
+            pour = min(jug_7, capacity_jug_5 - jug_5)
+            if dfs(jug_5 + pour, jug_7 - pour):
+                print(f"Pour {pour}-gallon from 7 to 5\t: ({jug_5}, {jug_7})")
+                return True
+
+        # Pour from jug_5 to jug_7
+        if jug_5 > 0 and jug_7 < capacity_jug_7:
+            pour = min(jug_5, capacity_jug_7 - jug_7)
+            if dfs(jug_5 - pour, jug_7 + pour):
+                print(f"Pour {pour}-gallon from 5 to 7\t: ({jug_5}, {jug_7})")
+                return True
+
+        # Empty jug_5
+        if jug_5 > 0:
+            if dfs(0, jug_7):
+                print(f"Empty 5-gallon jug\t\t: (0, {jug_7})")
+                return True
+
+        # Empty jug_7
+        if jug_7 > 0:
+            if dfs(jug_5, 0):
+                print(f"Empty 7-gallon jug\t\t: ({jug_5}, 0)")
+                return True
+
+        return False
+
+    if dfs(0, 0):
+        print("Target achieved!")
+    else:
+        print("Target cannot be achieved.")
+
+# Example: Target is 4 gallons in the 7-gallon jug
+water_jug_problem(5, 7, 4)
+
+
+Slip no 10
+
+
+Q1]
+
+from itertools import permutations
+
+def is_valid(puzzle_solution):
+    two = puzzle_solution['T'] * 100 + puzzle_solution['W'] * 10 + puzzle_solution['O']
+    four = puzzle_solution['F'] * 1000 + puzzle_solution['O'] * 100 + puzzle_solution['U'] * 10 + puzzle_solution['R']
+
+    return two + two == four
+
+def solve_cryptarithmetic():
+    puzzle_letters = set('TWOFOUR')
+    digits = range(10)
+    for perm in permutations(digits, len(puzzle_letters)):
+        puzzle_solution = dict(zip(puzzle_letters, perm))
+        if puzzle_solution['F'] == 0 or puzzle_solution['T'] == 0:
+            continue
+
+        if is_valid(puzzle_solution):
+            return puzzle_solution
+
+    return None
+
+def print_solution(solution):
+    print(f"T = {solution['T']}")
+    print(f"W = {solution['W']}")
+    print(f"O = {solution['O']}")
+    print(f"F = {solution['F']}")
+    print(f"U = {solution['U']}")
+    print(f"R = {solution['R']}")
+
+if __name__ == "__main__":
+    solution = solve_cryptarithmetic()
+
+    if solution:
+        print("Solution found:")
+        print_solution(solution)
+    else:
+        print("No solution found.")
+
+        
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+
+import re
+
+def simple_chatbot():
+    responses = {
+        r"(hi|hello|hey)( there)?": ["Hi!", "Hello!", "Hey! How can I help you?"],
+        r"how are you\??": ["I'm doing well, thank you!", "Pretty good. How about you?"],
+        r"what is your name\??": ["I'm a simple chatbot.", "You can call me Chatbot."],
+        r"bye": ["Goodbye!", "See you later!", "Take care!"]
+    }
+
+    print("Hello! I'm a simple chatbot. Type 'bye' to exit.")
+
+    while True:
+        user_input = input("You: ").lower()
+
+        if user_input == 'bye':
+            print("Chatbot: Goodbye!")
+            break
+
+        response_found = False
+        for pattern, possible_responses in responses.items():
+            if re.search(pattern, user_input):
+                response = possible_responses[random.randint(0, len(possible_responses)-1)]
+                print("Chatbot:", response)
+                response_found = True
+                break
+
+        if not response_found:
+            print("Chatbot: I'm not sure how to respond to that.")
+
+if __name__ == "__main__":
+    import random
+    simple_chatbot()
+
+
+
