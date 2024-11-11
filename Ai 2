@@ -1,0 +1,1598 @@
+@Slip no 11
+
+Q1]
+
+def mean_end_analysis(initial, goal):
+    current_state = initial
+    steps = 0
+
+    while current_state != goal:
+        print(f"Step {steps + 1}: {current_state}")
+
+        # Find the first mismatch in the strings
+        mismatch_index = -1
+        for i in range(min(len(current_state), len(goal))):
+            if current_state[i] != goal[i]:
+                mismatch_index = i
+                break
+
+        if mismatch_index == -1:
+            print("Transformation complete!")
+            break
+
+        # Find the optimal action to reduce the mismatch
+        optimal_action = min(ord(goal[mismatch_index]), ord(current_state[mismatch_index]))
+        optimal_action_char = chr(optimal_action)
+
+        # Apply the action
+        current_state = current_state[:mismatch_index] + optimal_action_char + current_state[mismatch_index + 1:]
+        steps += 1
+
+    print(f"Step {steps + 1}: {current_state}")
+
+if __name__ == "__main__":
+    initial_string = "abcd"
+    goal_string = "xyzd"
+
+    print(f"Initial State: {initial_string}")
+    print(f"Goal State: {goal_string}")
+
+    mean_end_analysis(initial_string, goal_string)
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+def water_jug_problem(capacity_jug_4, capacity_jug_3, target):
+    state_visited = set()
+
+    def dfs(jug_4, jug_3):
+        if jug_4 == target or jug_3 == target:
+            return True
+
+        state = (jug_4, jug_3)
+        if state in state_visited:
+            return False
+        state_visited.add(state)
+
+        # Fill jug_4
+        if jug_4 < capacity_jug_4:
+            if dfs(capacity_jug_4, jug_3):
+                print(f"Fill 4-gallon jug\t\t: ({capacity_jug_4}, {jug_3})")
+                return True
+
+        # Fill jug_3
+        if jug_3 < capacity_jug_3:
+            if dfs(jug_4, capacity_jug_3):
+                print(f"Fill 3-gallon jug\t\t: ({jug_4}, {capacity_jug_3})")
+                return True
+
+        # Pour from jug_4 to jug_3
+        if jug_4 > 0 and jug_3 < capacity_jug_3:
+            pour = min(jug_4, capacity_jug_3 - jug_3)
+            if dfs(jug_4 - pour, jug_3 + pour):
+                print(f"Pour {pour}-gallon from 4 to 3\t: ({jug_4}, {jug_3})")
+                return True
+
+        # Pour from jug_3 to jug_4
+        if jug_3 > 0 and jug_4 < capacity_jug_4:
+            pour = min(jug_3, capacity_jug_4 - jug_4)
+            if dfs(jug_4 + pour, jug_3 - pour):
+                print(f"Pour {pour}-gallon from 3 to 4\t: ({jug_4}, {jug_3})")
+                return True
+
+        # Empty jug_4
+        if jug_4 > 0:
+            if dfs(0, jug_3):
+                print(f"Empty 4-gallon jug\t\t: (0, {jug_3})")
+                return True
+
+        # Empty jug_3
+        if jug_3 > 0:
+            if dfs(jug_4, 0):
+                print(f"Empty 3-gallon jug\t\t: ({jug_4}, 0)")
+                return True
+
+        return False
+
+    if dfs(0, 0):
+        print("Target achieved!")
+    else:
+        print("Target cannot be achieved.")
+
+# Example: Target is 2 gallons in the 3-gallon jug
+water_jug_problem(4, 3, 2)
+
+
+
+@Slip no 12
+
+
+Q1]
+
+import calendar
+
+def generate_calendar(year, month):
+    cal = calendar.monthcalendar(year, month)
+    month_name = calendar.month_name[month]
+    print(f"\nCalendar for {month_name} {year}:\n")
+
+    # Print weekday names
+    print(" Mo Tu We Th Fr Sa Su")
+    for week in cal:
+        # Print each week
+        week_str = ' '.join(str(day) if day != 0 else '  ' for day in week)
+        print(week_str)
+
+if __name__ == "__main__":
+    try:
+        year = int(input("Enter the year: "))
+        month = int(input("Enter the month (1-12): "))
+
+        if 1 <= month <= 12:
+            generate_calendar(year, month)
+        else:
+            print("Invalid month input. Month should be between 1 and 12.")
+    except ValueError:
+        print("Invalid input. Please enter valid numbers.")
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+
+def print_solution(board):
+    for row in board:
+        print(' '.join('Q' if cell else '.' for cell in row))
+    print()
+
+def is_safe(board, row, col):
+    # Check if there is a queen in the same row
+    if any(board[row]):
+        return False
+
+    # Check if there is a queen in the same column
+    if any(board[i][col] for i in range(len(board))):
+        return False
+
+    # Check if there is a queen in the diagonals
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+    for i, j in zip(range(row, len(board), 1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+
+    return True
+
+def solve_queens(board, row):
+    if row == len(board):
+        # All queens are placed, print the solution
+        print_solution(board)
+        return
+
+    for col in range(len(board)):
+        if is_safe(board, row, col):
+            # Place the queen and move to the next row
+            board[row][col] = 1
+            solve_queens(board, row + 1)
+            # Backtrack: Remove the queen before trying a different position
+            board[row][col] = 0
+
+if __name__ == "__main__":
+    # Initialize a 4x4 chessboard with zeros
+    chessboard = [[0] * 4 for _ in range(4)]
+
+    # Start solving the 4-Queens problem from the first row
+    solve_queens(chessboard, 0)
+
+@Slip no 13
+
+Q1]
+
+import math
+
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def is_winner(board, player):
+    # Check rows and columns
+    for i in range(3):
+        if all(cell == player for cell in board[i]) or all(board[j][i] == player for j in range(3)):
+            return True
+
+    # Check diagonals
+    if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+        return True
+
+    return False
+
+def is_board_full(board):
+    return all(all(cell != ' ' for cell in row) for row in board)
+
+def get_empty_cells(board):
+    return [(i, j) for i in range(3) for j in range(3) if board[i][j] == ' ']
+
+def mini_max(board, depth, maximizing_player):
+    scores = {'X': 1, 'O': -1, 'Tie': 0}
+
+    if is_winner(board, 'X'):
+        return -1
+    elif is_winner(board, 'O'):
+        return 1
+    elif is_board_full(board):
+        return 0
+
+    if maximizing_player:
+        max_eval = -math.inf
+        for i, j in get_empty_cells(board):
+            board[i][j] = 'O'
+            eval = mini_max(board, depth + 1, False)
+            board[i][j] = ' '
+            max_eval = max(max_eval, eval)
+        return max_eval
+    else:
+        min_eval = math.inf
+        for i, j in get_empty_cells(board):
+            board[i][j] = 'X'
+            eval = mini_max(board, depth + 1, True)
+            board[i][j] = ' '
+            min_eval = min(min_eval, eval)
+        return min_eval
+
+def find_best_move(board):
+    best_val = -math.inf
+    best_move = None
+
+    for i, j in get_empty_cells(board):
+        board[i][j] = 'O'
+        move_val = mini_max(board, 0, False)
+        board[i][j] = ' '
+
+        if move_val > best_val:
+            best_move = (i, j)
+            best_val = move_val
+
+    return best_move
+
+if __name__ == "__main__":
+    # Initialize an empty Tic-Tac-Toe board
+    tic_tac_toe_board = [[' ' for _ in range(3)] for _ in range(3)]
+
+    # Play the game
+    while True:
+        print_board(tic_tac_toe_board)
+
+        # Player's move
+        row = int(input("Enter the row (0, 1, or 2): "))
+        col = int(input("Enter the column (0, 1, or 2): "))
+        if tic_tac_toe_board[row][col] == ' ':
+            tic_tac_toe_board[row][col] = 'X'
+        else:
+            print("Cell already occupied. Try again.")
+            continue
+
+        # Check if the player wins
+        if is_winner(tic_tac_toe_board, 'X'):
+            print_board(tic_tac_toe_board)
+            print("Congratulations! You win!")
+            break
+
+        # Check for a tie
+        if is_board_full(tic_tac_toe_board):
+            print_board(tic_tac_toe_board)
+            print("It's a tie!")
+            break
+
+        # Mini-Max's move
+        best_move = find_best_move(tic_tac_toe_board)
+        tic_tac_toe_board[best_move[0]][best_move[1]] = 'O'
+
+        # Check if Mini-Max wins
+        if is_winner(tic_tac_toe_board, 'O'):
+            print_board(tic_tac_toe_board)
+            print("Sorry, you lose. Mini-Max wins!")
+            break
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Q2]
+
+def print_solution(board):
+    for row in board:
+        print(' '.join('Q' if cell else '.' for cell in row))
+    print()
+
+def is_safe(board, row, col):
+    # Check if there is a queen in the same row
+    if any(board[row]):
+        return False
+
+    # Check if there is a queen in the same column
+    if any(board[i][col] for i in range(len(board))):
+        return False
+
+    # Check if there is a queen in the diagonals
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+    for i, j in zip(range(row, len(board), 1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+
+    return True
+
+def solve_queens(board, row):
+    if row == len(board):
+        # All queens are placed, print the solution
+        print_solution(board)
+        return
+
+    for col in range(len(board)):
+        if is_safe(board, row, col):
+            # Place the queen and move to the next row
+            board[row][col] = 1
+            solve_queens(board, row + 1)
+            # Backtrack: Remove the queen before trying a different position
+            board[row][col] = 0
+
+if __name__ == "__main__":
+    # Initialize an 8x8 chessboard with zeros
+    chessboard = [[0] * 8 for _ in range(8)]
+
+    # Start solving the 8-Queens problem from the first row
+    solve_queens(chessboard, 0)
+
+@Slip no 14
+
+Q1]def sort_sentence_alphabetically(sentence):
+    words = sentence.split()
+    sorted_words = sorted(words)
+    sorted_sentence = ' '.join(sorted_words)
+    return sorted_sentence
+
+if __name__ == "__main__":
+    input_sentence = input("Enter a sentence: ")
+    result = sort_sentence_alphabetically(input_sentence)
+    print("Sorted Sentence:", result)
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+def print_solution(board):
+    for row in board:
+        print(' '.join('Q' if cell else '.' for cell in row))
+    print()
+
+def is_safe(board, row, col, n):
+    # Check if there is a queen in the same row
+    if any(board[row]):
+        return False
+
+    # Check if there is a queen in the same column
+    if any(board[i][col] for i in range(n)):
+        return False
+
+    # Check if there is a queen in the diagonals
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+
+    return True
+
+def solve_n_queens(board, row, n):
+    if row == n:
+        # All queens are placed, print the solution
+        print_solution(board)
+        return
+
+    for col in range(n):
+        if is_safe(board, row, col, n):
+            # Place the queen and move to the next row
+            board[row][col] = 1
+            solve_n_queens(board, row + 1, n)
+            # Backtrack: Remove the queen before trying a different position
+            board[row][col] = 0
+
+if __name__ == "__main__":
+    try:
+        n = int(input("Enter the value of n: "))
+        if n <= 0:
+            raise ValueError("n should be a positive integer.")
+    except ValueError as e:
+        print(f"Invalid input: {e}")
+    else:
+        # Initialize an n x n chessboard with zeros
+        chessboard = [[0] * n for _ in range(n)]
+
+        # Start solving the n-Queens problem from the first row
+        solve_n_queens(chessboard, 0, n)
+
+
+@Slip no 15
+
+Q1]
+
+
+import random
+
+class MonkeyBananaProblem:
+    def __init__(self, rows, cols, slippery_tiles):
+        self.rows = rows
+        self.cols = cols
+        self.slippery_tiles = slippery_tiles
+        self.monkey_row = 0
+        self.monkey_col = 0
+        self.bananas = set()
+
+    def place_monkey_and_bananas(self):
+        self.monkey_row = random.randint(0, self.rows - 1)
+        self.monkey_col = random.randint(0, self.cols - 1)
+
+        for _ in range(random.randint(1, min(self.rows, self.cols))):
+            banana_row = random.randint(0, self.rows - 1)
+            banana_col = random.randint(0, self.cols - 1)
+
+            while (banana_row, banana_col) in self.bananas or (banana_row, banana_col) == (self.monkey_row, self.monkey_col):
+                banana_row = random.randint(0, self.rows - 1)
+                banana_col = random.randint(0, self.cols - 1)
+
+            self.bananas.add((banana_row, banana_col))
+
+    def display_board(self):
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if (i, j) == (self.monkey_row, self.monkey_col):
+                    print('M', end=' ')
+                elif (i, j) in self.bananas:
+                    print('B', end=' ')
+                elif (i, j) in self.slippery_tiles:
+                    print('S', end=' ')
+                else:
+                    print('.', end=' ')
+            print()
+
+    def collect_bananas(self):
+        bananas_collected = 0
+
+        while self.bananas:
+            reachable_bananas = self.find_reachable_bananas()
+            if not reachable_bananas:
+                break
+
+            closest_banana = min(reachable_bananas, key=lambda x: self.distance(self.monkey_row, self.monkey_col, x[0], x[1]))
+            self.move_monkey_towards(closest_banana[0], closest_banana[1])
+            bananas_collected += 1
+            self.bananas.remove(closest_banana)
+
+        return bananas_collected
+
+    def find_reachable_bananas(self):
+        reachable_bananas = set()
+
+        for banana in self.bananas:
+            if self.is_reachable(banana[0], banana[1]):
+                reachable_bananas.add(banana)
+
+        return reachable_bananas
+
+    def is_reachable(self, banana_row, banana_col):
+        return (
+            (self.monkey_row, self.monkey_col) != (banana_row, banana_col) and
+            (banana_row, banana_col) not in self.slippery_tiles and
+            (
+                self.monkey_row == banana_row or
+                self.monkey_col == banana_col or
+                abs(self.monkey_row - banana_row) == abs(self.monkey_col - banana_col)
+            )
+        )
+
+    def move_monkey_towards(self, target_row, target_col):
+        if self.monkey_row < target_row:
+            self.monkey_row += 1
+        elif self.monkey_row > target_row:
+            self.monkey_row -= 1
+
+        if self.monkey_col < target_col:
+            self.monkey_col += 1
+        elif self.monkey_col > target_col:
+            self.monkey_col -= 1
+
+    def distance(self, row1, col1, row2, col2):
+        return abs(row1 - row2) + abs(col1 - col2)
+
+
+if __name__ == "__main__":
+    rows = 5
+    cols = 5
+    slippery_tiles = {(1, 1), (2, 2), (3, 3)}
+
+    monkey_banana_problem = MonkeyBananaProblem(rows, cols, slippery_tiles)
+    monkey_banana_problem.place_monkey_and_bananas()
+
+    print("Initial State:")
+    monkey_banana_problem.display_board()
+
+    bananas_collected = monkey_banana_problem.collect_bananas()
+
+    print("\nFinal State:")
+    monkey_banana_problem.display_board()
+
+    print(f"\nBananas Collected: {bananas_collected}")
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+
+class Node:
+    def __init__(self, name):
+        self.name = name
+        self.children = []
+
+    def add_child(self, child):
+        self.children.append(child)
+
+def depth_limited_dfs(node, goal, depth_limit, current_depth):
+    if current_depth > depth_limit:
+        return False
+
+    print(f"Checking node: {node.name}")
+
+    if node.name == goal:
+        print(f"Goal node {goal} found at depth {current_depth}")
+        return True
+
+    for child in node.children:
+        if depth_limited_dfs(child, goal, depth_limit, current_depth + 1):
+            return True
+
+    return False
+
+def iterative_deepening_dfs(root, goal):
+    depth_limit = 0
+
+    while True:
+        print(f"\nDepth Limit: {depth_limit}")
+        if depth_limited_dfs(root, goal, depth_limit, 0):
+            return True
+
+        depth_limit += 1
+
+if __name__ == "__main__":
+    # Example Graph
+    # A -> B, C
+    # B -> D, E
+    # C -> F, G
+    # E -> H, I
+    # F -> J
+    # G -> K
+    # K -> L
+
+    root = Node("A")
+    node_b = Node("B")
+    node_c = Node("C")
+    node_d = Node("D")
+    node_e = Node("E")
+    node_f = Node("F")
+    node_g = Node("G")
+    node_h = Node("H")
+    node_i = Node("I")
+    node_j = Node("J")
+    node_k = Node("K")
+    node_l = Node("L")
+
+    root.add_child(node_b)
+    root.add_child(node_c)
+    node_b.add_child(node_d)
+    node_b.add_child(node_e)
+    node_c.add_child(node_f)
+    node_c.add_child(node_g)
+    node_e.add_child(node_h)
+    node_e.add_child(node_i)
+    node_f.add_child(node_j)
+    node_g.add_child(node_k)
+    node_k.add_child(node_l)
+
+    goal_node = "G"
+
+    if iterative_deepening_dfs(root, goal_node):
+        print(f"\nGoal node {goal_node} found.")
+    else:
+        print(f"\nGoal node {goal_node} not found.")
+
+
+@Slip no 16
+
+Q1]
+
+def tower_of_hanoi(n, source, target, auxiliary):
+    if n > 0:
+        # Move n-1 disks from source to auxiliary peg
+        tower_of_hanoi(n-1, source, auxiliary, target)
+        
+        # Move the nth disk from source to target peg
+        print(f"Move disk {n} from {source} to {target}")
+        
+        # Move the n-1 disks from auxiliary peg to target peg
+        tower_of_hanoi(n-1, auxiliary, target, source)
+
+# Example usage:
+num_disks = 3
+tower_of_hanoi(num_disks, 'A', 'C', 'B')
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def check_winner(board, player):
+    # Check rows, columns, and diagonals for a win
+    for i in range(3):
+        if all(board[i][j] == player for j in range(3)) or all(board[j][i] == player for j in range(3)):
+            return True
+    if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+        return True
+    return False
+
+def is_board_full(board):
+    return all(board[i][j] != ' ' for i in range(3) for j in range(3))
+
+def play_tic_tac_toe():
+    board = [[' ' for _ in range(3)] for _ in range(3)]
+    current_player = 'X'
+
+    while True:
+        print_board(board)
+
+        # Get player move
+        while True:
+            row = int(input(f"Player {current_player}, enter row (0, 1, or 2): "))
+            col = int(input(f"Player {current_player}, enter column (0, 1, or 2): "))
+            if 0 <= row < 3 and 0 <= col < 3 and board[row][col] == ' ':
+                break
+            else:
+                print("Invalid move. Try again.")
+
+        # Make the move
+        board[row][col] = current_player
+
+        # Check for a winner
+        if check_winner(board, current_player):
+            print_board(board)
+            print(f"Player {current_player} wins!")
+            break
+
+        # Check for a draw
+        if is_board_full(board):
+            print_board(board)
+            print("It's a draw!")
+            break
+
+        # Switch to the other player
+        current_player = 'O' if current_player == 'X' else 'X'
+
+if __name__ == "__main__":
+    play_tic_tac_toe()
+
+
+
+@Slip no 17
+
+Q1]
+
+import math
+
+def target_function(x):
+    # Define the mathematical function to maximize (you can change this function)
+    return -x**2 + 5*x + 10
+
+def hill_climbing(start_x, step_size, max_iterations):
+    current_x = start_x
+
+    for _ in range(max_iterations):
+        current_value = target_function(current_x)
+        next_x = current_x + step_size
+        next_value = target_function(next_x)
+
+        if next_value > current_value:
+            current_x = next_x
+        else:
+            break
+
+    return current_x, target_function(current_x)
+
+if __name__ == "__main__":
+    # Set initial parameters
+    start_x = 0.0
+    step_size = 0.1
+    max_iterations = 100
+
+    # Run hill climbing algorithm
+    max_x, max_value = hill_climbing(start_x, step_size, max_iterations)
+
+    # Print the result
+    print(f"Maximum found at x = {max_x}, with function value = {max_value}")
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+Q2]
+
+import heapq
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, start, end, cost):
+        if start not in self.graph:
+            self.graph[start] = []
+        self.graph[start].append((end, cost))
+
+    def astar(self, start, goal):
+        open_set = [(0, start)]
+        came_from = {}
+        g_score = {vertex: float('inf') for vertex in self.graph}
+        g_score[start] = 0
+        f_score = {vertex: float('inf') for vertex in self.graph}
+        f_score[start] = self.heuristic(start, goal)
+
+        while open_set:
+            current_cost, current_vertex = heapq.heappop(open_set)
+
+            if current_vertex == goal:
+                path = self.reconstruct_path(came_from, current_vertex)
+                return path
+
+            for neighbor, cost in self.graph[current_vertex]:
+                tentative_g_score = g_score[current_vertex] + cost
+                if tentative_g_score < g_score[neighbor]:
+                    came_from[neighbor] = current_vertex
+                    g_score[neighbor] = tentative_g_score
+                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
+                    heapq.heappush(open_set, (f_score[neighbor], neighbor))
+
+        return None
+
+    def heuristic(self, current, goal):
+        # You may define your own heuristic function here
+        # For simplicity, let's use a trivial heuristic - distance between current and goal
+        return 0
+
+    def reconstruct_path(self, came_from, current):
+        path = [current]
+        while current in came_from:
+            current = came_from[current]
+            path.append(current)
+        return path[::-1]
+
+if __name__ == "__main__":
+    # Create a sample graph
+    graph = Graph()
+    graph.add_edge('A', 'B', 1)
+    graph.add_edge('A', 'C', 4)
+    graph.add_edge('B', 'D', 3)
+    graph.add_edge('C', 'D', 1)
+    graph.add_edge('D', 'G', 5)
+
+    # Set start and goal vertices
+    start_vertex = 'A'
+    goal_vertex = 'G'
+
+    # Run A* algorithm
+    path = graph.astar(start_vertex, goal_vertex)
+
+    if path:
+        print(f"Shortest path from {start_vertex} to {goal_vertex}: {path}")
+    else:
+        print(f"No path found from {start_vertex} to {goal_vertex}")
+
+Slip no 18
+
+
+Q1]
+
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('stopwords')
+nltk.download('punkt')
+
+def remove_stop_words(input_file, output_file):
+    # Load stop words
+    stop_words = set(stopwords.words('english'))
+
+    # Read the content from the input file
+    with open(input_file, 'r', encoding='utf-8') as file:
+        passage = file.read()
+
+    # Tokenize the passage
+    words = word_tokenize(passage)
+
+    # Remove stop words
+    filtered_words = [word for word in words if word.lower() not in stop_words]
+
+    # Save the result to the output file
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write(' '.join(filtered_words))
+
+if __name__ == "__main__":
+    # Specify the input and output file paths
+    input_file_path = 'input.txt'  # Replace with the path to your input file
+    output_file_path = 'output.txt'  # Replace with the desired output file path
+
+    # Remove stop words and save the result
+    remove_stop_words(input_file_path, output_file_path)
+
+    print(f"Stop words removed. Result saved to {output_file_path}.")
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+Q2]
+
+
+import heapq
+
+class State:
+    def __init__(self, room, objects):
+        self.room = room
+        self.objects = objects
+
+    def __lt__(self, other):
+        return self.cost() + self.heuristic() < other.cost() + other.heuristic()
+
+    def cost(self):
+        # Cost based on the total area of the empty space in the room
+        total_area = self.room[0] * self.room[1]
+        used_area = sum(obj[0] * obj[1] for obj in self.objects)
+        return total_area - used_area
+
+    def heuristic(self):
+        # Heuristic based on the remaining empty space in the room
+        return self.cost()
+
+    def is_goal(self):
+        return self.cost() == 0
+
+def move_object(state, object_index, new_position):
+    new_objects = state.objects[:]
+    new_objects[object_index] = new_position
+    return State(state.room, new_objects)
+
+def generate_initial_state():
+    # Room dimensions: 10 units x 10 units
+    room_dimensions = (10, 10)
+
+    # Object dimensions
+    rectangular_objects = [(2, 5) for _ in range(5)]
+    square_objects = [(3, 3) for _ in range(4)]
+
+    # Initial state with all objects placed at (0, 0)
+    initial_objects = [(0, 0) for _ in rectangular_objects + square_objects]
+
+    return State(room_dimensions, initial_objects)
+
+def a_star(initial_state):
+    open_set = [initial_state]
+    closed_set = set()
+
+    while open_set:
+        current_state = heapq.heappop(open_set)
+
+        if current_state.is_goal():
+            return current_state.objects
+
+        closed_set.add(current_state)
+
+        for i in range(len(current_state.objects)):
+            for j in range(current_state.room[0] - current_state.objects[i][0] + 1):
+                for k in range(current_state.room[1] - current_state.objects[i][1] + 1):
+                    new_position = (j, k)
+                    new_state = move_object(current_state, i, new_position)
+
+                    if new_state not in closed_set and new_state not in open_set:
+                        heapq.heappush(open_set, new_state)
+
+    return None
+
+if __name__ == "__main__":
+    initial_state = generate_initial_state()
+    result = a_star(initial_state)
+
+    if result:
+        print("Final arrangement:")
+        for i, obj in enumerate(result):
+            print(f"Object {i + 1}: Position {obj}")
+    else:
+        print("No solution found.")
+
+
+@Slip no 19
+
+Q1]
+
+
+import random
+
+def choose_word():
+    word_list = ["python", "hangman", "programming", "computer", "science", "algorithm"]
+    return random.choice(word_list)
+
+def display_word(word, guessed_letters):
+    display = ""
+    for letter in word:
+        if letter in guessed_letters:
+            display += letter
+        else:
+            display += "_"
+    return display
+
+def hangman():
+    print("Welcome to Hangman!")
+    
+    secret_word = choose_word().lower()
+    guessed_letters = set()
+    attempts_left = 6
+
+    while True:
+        print("\n" + display_word(secret_word, guessed_letters))
+        guess = input("Enter a letter: ").lower()
+
+        if len(guess) != 1 or not guess.isalpha():
+            print("Please enter a single alphabet.")
+            continue
+
+        if guess in guessed_letters:
+            print("You've already guessed that letter. Try again.")
+            continue
+
+        guessed_letters.add(guess)
+
+        if guess not in secret_word:
+            attempts_left -= 1           
+
+        if "_" not in display_word(secret_word, guessed_letters):
+            print("\nCongratulations! You guessed the word:", secret_word)
+            break
+
+        print_hangman(attempts_left)
+
+        if attempts_left == 0:
+            print("\nSorry, you ran out of attempts. The word was:", secret_word)
+            break
+
+def print_hangman(attempts_left):
+    hangman_art = [
+        """
+        ------
+        |    |
+        |
+        |
+        |
+        |
+        -
+        """,
+        """
+        ------
+        |    |
+        |    O
+        |
+        |
+        |
+        -
+        """,
+        """
+        ------
+        |    |
+        |    O
+        |    |
+        |
+        |
+        -
+        """,
+        """
+        ------
+        |    |
+        |    O
+        |   /|
+        |
+        |
+        -
+        """,
+        """
+        ------
+        |    |
+        |    O
+        |   /|\\
+        |
+        |
+        -
+        """,
+        """
+        ------
+        |    |
+        |    O
+        |   /|\\
+        |   /
+        |
+        -
+        """,
+        """
+        ------
+        |    |
+        |    O
+        |   /|\\
+        |   / \\
+        |
+        -
+        """
+    ]
+
+    print(hangman_art[6 - attempts_left])
+
+if __name__ == "__main__":
+    hangman()
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+Q2]
+
+
+import heapq
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, node, neighbors):
+        self.graph[node] = neighbors
+
+def astar(graph, start, goal):
+    open_set = [(0, start)]
+    closed_set = set()
+    came_from = {}
+    g_score = {node: float('inf') for node in graph.graph}
+    g_score[start] = 0
+    f_score = {node: float('inf') for node in graph.graph}
+    f_score[start] = heuristic(start, goal)
+
+    while open_set:
+        current_cost, current_node = heapq.heappop(open_set)
+
+        if current_node == goal:
+            path = reconstruct_path(came_from, current_node)
+            return path
+
+        closed_set.add(current_node)
+
+        for neighbor, cost in graph.graph[current_node]:
+            if neighbor in closed_set:
+                continue
+
+            tentative_g_score = g_score[current_node] + cost
+
+            if neighbor not in [item[1] for item in open_set] or tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current_node
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = tentative_g_score + heuristic(neighbor, goal)
+                heapq.heappush(open_set, (f_score[neighbor], neighbor))
+
+    return None
+
+def heuristic(node, goal):
+    # Define your heuristic function here
+    # For simplicity, let's use a trivial heuristic - distance between nodes
+    return 0
+
+def reconstruct_path(came_from, current):
+    path = [current]
+    while current in came_from:
+        current = came_from[current]
+        path.append(current)
+    return path[::-1]
+
+if __name__ == "__main__":
+    # Create a sample graph
+    sample_graph = Graph()
+    sample_graph.add_edge('A', [('B', 1), ('C', 4)])
+    sample_graph.add_edge('B', [('D', 3)])
+    sample_graph.add_edge('C', [('D', 1)])
+    sample_graph.add_edge('D', [('G', 5)])
+
+    # Set start and goal nodes
+    start_node = 'A'
+    goal_node = 'G'
+
+    # Run A* algorithm
+    path = astar(sample_graph, start_node, goal_node)
+
+    if path:
+        print(f"Shortest path from {start_node} to {goal_node}: {path}")
+    else:
+        print(f"No path found from {start_node} to {goal_node}")
+
+Slip no 20
+
+
+Q1]
+
+import random
+
+class CollegeBot:
+    def __init__(self):
+        self.college_info = {
+            'name': 'Your College Name',
+            'location': 'City, Country',
+            'courses': ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering'],
+            'clubs': ['Coding Club', 'Robotics Club', 'Sports Club'],
+            'faculty': {'Computer Science': ['Prof. A', 'Prof. B'], 'Electrical Engineering': ['Prof. X', 'Prof. Y']},
+        }
+
+    def respond_to_query(self, query):
+        query = query.lower()
+
+        if 'name' in query:
+            return f"My college's name is {self.college_info['name']}."
+
+        elif 'location' in query:
+            return f"My college is located in {self.college_info['location']}."
+
+        elif 'courses' in query:
+            courses = ', '.join(self.college_info['courses'])
+            return f"We offer the following courses: {courses}."
+
+        elif 'clubs' in query:
+            clubs = ', '.join(self.college_info['clubs'])
+            return f"We have various clubs, including: {clubs}."
+
+        elif 'faculty' in query:
+            faculty_info = self.college_info['faculty']
+            faculty = random.choice(list(faculty_info.keys()))
+            professors = ', '.join(faculty_info[faculty])
+            return f"The faculty for {faculty} includes: {professors}."
+
+        else:
+            return "I'm sorry, I don't have information on that. You can ask about the name, location, courses, clubs, or faculty of my college."
+
+if __name__ == "__main__":
+    bot = CollegeBot()
+    print("CollegeBot: Hi! I'm your college information bot. Ask me anything about the college.")
+
+    while True:
+        user_query = input("You: ").lower()
+
+        if user_query == 'exit':
+            print("CollegeBot: Goodbye!")
+            break
+
+        response = bot.respond_to_query(user_query)
+        print(f"CollegeBot: {response}")
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+Q2]
+
+
+import math
+
+def evaluate(board):
+    # Check rows, columns, and diagonals for a win
+    for i in range(3):
+        if all(board[i][j] == 'X' for j in range(3)):
+            return 10
+        elif all(board[i][j] == 'O' for j in range(3)):
+            return -10
+
+    for j in range(3):
+        if all(board[i][j] == 'X' for i in range(3)):
+            return 10
+        elif all(board[i][j] == 'O' for i in range(3)):
+            return -10
+
+    if all(board[i][i] == 'X' for i in range(3)):
+        return 10
+    elif all(board[i][i] == 'O' for i in range(3)):
+        return -10
+
+    if all(board[i][2 - i] == 'X' for i in range(3)):
+        return 10
+    elif all(board[i][2 - i] == 'O' for i in range(3)):
+        return -10
+
+    return 0
+
+def is_moves_left(board):
+    return any(board[i][j] == ' ' for i in range(3) for j in range(3))
+
+def mini_max(board, depth, is_maximizing):
+    score = evaluate(board)
+
+    if score == 10:
+        return score - depth
+
+    if score == -10:
+        return score + depth
+
+    if not is_moves_left(board):
+        return 0
+
+    if is_maximizing:
+        best = -math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'X'
+                    best = max(best, mini_max(board, depth + 1, not is_maximizing))
+                    board[i][j] = ' '
+        return best
+
+    else:
+        best = math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == ' ':
+                    board[i][j] = 'O'
+                    best = min(best, mini_max(board, depth + 1, not is_maximizing))
+                    board[i][j] = ' '
+        return best
+
+def find_best_move(board):
+    best_val = -math.inf
+    best_move = (-1, -1)
+
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == ' ':
+                board[i][j] = 'X'
+                move_val = mini_max(board, 0, False)
+                board[i][j] = ' '
+
+                if move_val > best_val:
+                    best_move = (i, j)
+                    best_val = move_val
+
+    return best_move
+
+def print_board(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+if __name__ == "__main__":
+    # Initialize an empty Tic-Tac-Toe board
+    board = [[' ' for _ in range(3)] for _ in range(3)]
+
+    print("Initial Board:")
+    print_board(board)
+
+    for _ in range(4):  # Play four moves
+        # Player 'X' move
+        x, y = map(int, input("Enter 'X' move (row and column separated by space): ").split())
+        board[x][y] = 'X'
+
+        print("After 'X' move:")
+        print_board(board)
+
+        # Player 'O' move (AI move)
+        print("AI 'O' move:")
+        ai_move = find_best_move(board)
+        board[ai_move[0]][ai_move[1]] = 'O'
+
+        print_board(board)
+
+    # The game will now continue until one player wins or it ends in a draw.
+
+@Slip no 21
+
+
+Q1]
+
+
+import string
+
+def remove_punctuation(input_string):
+    # Using string.punctuation to get a string of all punctuation marks
+    translator = str.maketrans('', '', string.punctuation)
+    result = input_string.translate(translator)
+    return result
+
+if __name__ == "__main__":
+    input_string = "Hello, World! This is an example string with punctuations."
+
+    # Call the function to remove punctuations
+    result_string = remove_punctuation(input_string)
+
+    # Print the original and result strings
+    print("Original String:", input_string)
+    print("String without Punctuations:", result_string)
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+Q2]
+
+
+from itertools import permutations
+
+def solve_cryptarithmetic(puzzle):
+    # Extract unique letters from the puzzle
+    letters = set(char for word in puzzle for char in word)
+    
+    # If the length of letters is greater than 10, it's not solvable
+    if len(letters) > 10:
+        return None
+    
+    # Generate all possible digit permutations
+    for perm in permutations('0123456789', len(letters)):
+        digit_mapping = dict(zip(letters, perm))
+        expression = substitute(puzzle, digit_mapping)
+        
+        # Check if the expression is a valid solution
+        if is_solution(expression):
+            return digit_mapping
+    
+    return None
+
+def substitute(puzzle, digit_mapping):
+    return ["".join(digit_mapping[char] for char in word) for word in puzzle]
+
+def is_solution(expression):
+    # Split the expression into words and convert them to integers
+    go, to, out = map(int, expression)
+    
+    # Check if the equation is valid
+    return go + to == out
+
+if __name__ == "__main__":
+    puzzle = ["GO", "TO", "OUT"]
+
+    solution = solve_cryptarithmetic(puzzle)
+
+    if solution:
+        print("Solution found:")
+        for word in puzzle:
+            print(f"{word} = {substitute([word], solution)[0]}")
+    else:
+        print("No solution found.")
+
+
+@Slip no 22
+
+Q1]
+
+
+import math
+
+def alpha_beta_pruning(node, depth, alpha, beta, maximizing_player):
+    if depth == 0 or is_terminal_node(node):
+        return evaluate(node)
+
+    if maximizing_player:
+        value = -math.inf
+        for child in generate_children(node):
+            value = max(value, alpha_beta_pruning(child, depth - 1, alpha, beta, False))
+            alpha = max(alpha, value)
+            if beta <= alpha:
+                break  # Beta cut-off
+        return value
+    else:
+        value = math.inf
+        for child in generate_children(node):
+            value = min(value, alpha_beta_pruning(child, depth - 1, alpha, beta, True))
+            beta = min(beta, value)
+            if beta <= alpha:
+                break  # Alpha cut-off
+        return value
+
+def is_terminal_node(node):
+    # Define your terminal node condition based on the problem
+    # For simplicity, assuming nodes with depth 0 are terminal
+    return node['depth'] == 0
+
+def evaluate(node):
+    # Define your evaluation function based on the problem
+    # For simplicity, returning a random value
+    return node['value']
+
+def generate_children(node):
+    # Define your function to generate children nodes based on the problem
+    # For simplicity, returning an empty list
+    return []
+
+if __name__ == "__main__":
+    # Example usage:
+    root_node = {'depth': 3, 'value': 0}  # You need to define your root node structure
+
+    result = alpha_beta_pruning(root_node, 3, -math.inf, math.inf, True)
+
+    print(f"Result: {result}")
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+
+
+Q2]
+
+
+import random
+
+def simple_chatbot():
+    print("Simple Chatbot: Hello! I'm a simple chatbot. Type 'exit' to end the conversation.")
+
+    while True:
+        user_input = input("You: ").lower()
+
+        if user_input == 'exit':
+            print("Simple Chatbot: Goodbye!")
+            break
+
+        response = get_response(user_input)
+        print(f"Simple Chatbot: {response}")
+
+def get_response(user_input):
+    # Define simple responses based on user input
+    greetings = ['hello', 'hi', 'hey', 'greetings']
+    farewells = ['goodbye', 'bye', 'see you', 'take care']
+
+    if any(greeting in user_input for greeting in greetings):
+        return "Hi there! How can I help you?"
+
+    elif any(farewell in user_input for farewell in farewells):
+        return "Goodbye! Have a great day."
+
+    else:
+        return "I'm just a simple chatbot. I may not understand everything. Feel free to ask me anything."
+
+if __name__ == "__main__":
+    simple_chatbot()
+
+@Slip no 23
+
+
+Q1]
+
+
+def tower_of_hanoi(n, source, target, auxiliary):
+    if n == 1:
+        print(f"Move disk 1 from {source} to {target}")
+        return
+    tower_of_hanoi(n-1, source, auxiliary, target)
+    print(f"Move disk {n} from {source} to {target}")
+    tower_of_hanoi(n-1, auxiliary, target, source)
+
+if __name__ == "__main__":
+    num_disks = int(input("Enter the number of disks: "))
+    tower_of_hanoi(num_disks, 'A', 'C', 'B')
+
+    
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Q2]
+
+
+from itertools import permutations
+
+def solve_cryptarithmetic():
+    for permutation in permutations('0123456789', 8):
+        digit_mapping = dict(zip('SENDMORY', permutation))
+
+        send = int(digit_mapping['S'] + digit_mapping['E'] + digit_mapping['N'] + digit_mapping['D'])
+        more = int(digit_mapping['M'] + digit_mapping['O'] + digit_mapping['R'] + digit_mapping['E'])
+        money = int(digit_mapping['M'] + digit_mapping['O'] + digit_mapping['N'] + digit_mapping['E'] + digit_mapping['Y'])
+
+        if send + more == money:
+            print(f"S = {digit_mapping['S']}, E = {digit_mapping['E']}, N = {digit_mapping['N']}, D = {digit_mapping['D']}")
+            print(f"M = {digit_mapping['M']}, O = {digit_mapping['O']}, R = {digit_mapping['R']}")
+            print(f"Y = {digit_mapping['Y']}")
+            print("SEND + MORE = MONEY")
+            return
+
+    print("No solution found.")
+
+if __name__ == "__main__":
+    solve_cryptarithmetic()
+
+
+@Slip no 24
+
+Q1]
+
+def sort_sentence_alphabetically(sentence):
+    words = sentence.split()
+    sorted_words = sorted(words)
+    sorted_sentence = ' '.join(sorted_words)
+    return sorted_sentence
+
+if __name__ == "__main__":
+    input_sentence = input("Enter a sentence: ")
+    sorted_sentence = sort_sentence_alphabetically(input_sentence)
+    print("Sorted Sentence:", sorted_sentence)
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Q2]
+
+
+
+from itertools import permutations
+
+def solve_cryptarithmetic():
+    for permutation in permutations('0123456789', 8):
+        digit_mapping = dict(zip('CROSSROADSDANGER', permutation))
+
+        cross = int(digit_mapping['C'] + digit_mapping['R'] + digit_mapping['O'] + digit_mapping['S'] + digit_mapping['S'])
+        roads = int(digit_mapping['R'] + digit_mapping['O'] + digit_mapping['A'] + digit_mapping['D'] + digit_mapping['S'])
+        danger = int(digit_mapping['D'] + digit_mapping['A'] + digit_mapping['N'] + digit_mapping['G'] + digit_mapping['E'] + digit_mapping['R'])
+
+        if cross + roads == danger:
+            print(f"C = {digit_mapping['C']}, R = {digit_mapping['R']}, O = {digit_mapping['O']}, S = {digit_mapping['S']}")
+            print(f"A = {digit_mapping['A']}, D = {digit_mapping['D']}, N = {digit_mapping['N']}, G = {digit_mapping['G']}, E = {digit_mapping['E']}")
+            print("CROSS + ROADS = DANGER")
+            return
+
+    print("No solution found.")
+
+if __name__ == "__main__":
+    solve_cryptarithmetic()
+
+
+
+
+
