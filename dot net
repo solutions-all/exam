@@ -1,0 +1,924 @@
+Slip no 17
+Q1]
+using System;
+class Program
+{
+ static void Main()
+ {
+ int num1 = 5, num2 = 10, num3 = 15;
+ float floatNum1 = 3.5f, floatNum2 = 7.5f, floatNum3 = 10.5f;
+ // Display original values
+ Console.WriteLine("Original Integers: {0}, {1}, {2}", num1, num2,
+num3);
+ Console.WriteLine("Original Floats: {0}, {1}, {2}", floatNum1,
+floatNum2, floatNum3);
+ // Swap integers
+ Swap(ref num1, ref num2, ref num3);
+ // Swap floats
+ Swap(ref floatNum1, ref floatNum2, ref floatNum3);
+ // Display swapped values
+ Console.WriteLine("\nSwapped Integers: {0}, {1}, {2}", num1, num2,
+num3);
+ Console.WriteLine("Swapped Floats: {0}, {1}, {2}", floatNum1,
+floatNum2, floatNum3);
+ }
+ // Function to swap three integers
+ static void Swap(ref int a, ref int b, ref int c)
+ {
+ int temp = a;
+ a = b;
+ b = c;
+ c = temp;
+ }
+ // Function to swap three floats
+ static void Swap(ref float a, ref float b, ref float c)
+ {
+ float temp = a;
+ a = b;
+ b = c;
+ c = temp;
+ }
+}
+-----------------------------------------------------------------------------
+---------------------------------------------------------
+Q2]
+using System;
+class Program
+{
+ static void Main()
+ {
+ // Input two 3x3 matrices from the user
+ int[,] matrix1 = InputMatrix("Enter the elements for the first 3x3
+matrix:");
+ int[,] matrix2 = InputMatrix("Enter the elements for the second 3x3
+matrix:");
+ // Check if multiplication is possible
+ if (matrix1.GetLength(1) != matrix2.GetLength(0))
+ {
+ Console.WriteLine("Matrix multiplication is not possible. Number
+of columns in the first matrix must be equal to the number of rows in the
+second matrix.");
+ }
+ else
+ {
+ // Multiply the matrices
+ int[,] resultMatrix = MultiplyMatrices(matrix1, matrix2);
+ // Display the result
+ Console.WriteLine("\nResultant Matrix (Matrix1 * Matrix2):");
+ DisplayMatrix(resultMatrix);
+ }
+ }
+ static int[,] InputMatrix(string message)
+ {
+ Console.WriteLine(message);
+ int[,] matrix = new int[3, 3];
+ for (int i = 0; i < 3; i++)
+ {
+ for (int j = 0; j < 3; j++)
+ {
+ Console.Write($"Enter element at position [{i + 1}, {j + 1}]:
+");
+ matrix[i, j] = int.Parse(Console.ReadLine());
+ }
+ }
+ return matrix;
+ }
+ static int[,] MultiplyMatrices(int[,] matrix1, int[,] matrix2)
+ {
+ int[,] resultMatrix = new int[3, 3];
+ for (int i = 0; i < 3; i++)
+ {
+ for (int j = 0; j < 3; j++)
+ {
+ for (int k = 0; k < 3; k++)
+ {
+ resultMatrix[i, j] += matrix1[i, k] * matrix2[k, j];
+ }
+ }
+ }
+ return resultMatrix;
+ }
+ static void DisplayMatrix(int[,] matrix)
+ {
+ for (int i = 0; i < 3; i++)
+ {
+ for (int j = 0; j < 3; j++)
+ {
+ Console.Write(matrix[i, j] + " ");
+ }
+ Console.WriteLine();
+ }
+ }
+}
+Slip no 19
+Q1]
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+namespace PrimeNumbersApp
+{
+ public partial class Form1 : Form
+ {
+ public Form1()
+ {
+ InitializeComponent();
+ }
+ private void Form1_Load(object sender, EventArgs e)
+ {
+ DisplayPrimeNumbers();
+ }
+ private void DisplayPrimeNumbers()
+ {
+ List<int> primes = GetPrimeNumbers(1, 100);
+ // Display the prime numbers on the label
+ labelPrimes.Text = "Prime Numbers: " + string.Join(", ", primes);
+ }
+ private List<int> GetPrimeNumbers(int start, int end)
+ {
+ List<int> primes = new List<int>();
+ for (int i = start; i <= end; i++)
+ {
+ if (IsPrime(i))
+ {
+ primes.Add(i);
+ }
+ }
+ return primes;
+ }
+ private bool IsPrime(int number)
+ {
+ if (number < 2)
+ return false;
+ for (int i = 2; i <= Math.Sqrt(number); i++)
+ {
+ if (number % i == 0)
+ return false;
+ }
+ return true;
+ }
+ }
+}
+-----------------------------------------------------------------------------
+-----------------------------------------------
+Q2]
+using System;
+namespace Calculator
+{
+class Program
+{
+static void Main(string[] args)
+{
+// Get the two numbers from the user.
+Console.WriteLine("Enter the first number:");
+double num1 = double.Parse(Console.ReadLine());
+Console.WriteLine("Enter the second number:");
+double num2 = double.Parse(Console.ReadLine());
+// Get the operation from the user.
+Console.WriteLine("Enter the operation (+, -, *, /):");
+string operation = Console.ReadLine();
+// Perform the operation and display the result.
+switch (operation)
+{
+case "+":
+Console.WriteLine("The result is: {0}", num1 + num2);
+break;
+case "-":
+Console.WriteLine("The result is: {0}", num1 - num2);
+break;
+case "*":
+Console.WriteLine("The result is: {0}", num1 * num2);
+break;
+case "/":
+Console.WriteLine("The result is: {0}", num1 / num2);
+break;
+default:
+Console.WriteLine("Invalid operation.");
+break;
+}
+}
+}
+}
+Slip no 13
+Q1]
+using System;
+using System.Reflection;
+public class Program
+{
+public static void Main(string[] args)
+{
+// Create an instance of the private assembly.
+Assembly privateAssembly = Assembly.LoadFrom("PrivateAssembly.dll");
+// Get the type of the class in the private assembly.
+Type privateClassType =
+privateAssembly.GetType("PrivateAssembly.PrivateClass");
+// Create an instance of the class in the private assembly.
+object privateClassInstance = Activator.CreateInstance(privateClassType);
+// Call a method on the class in the private assembly.
+MethodInfo privateMethod = privateClassType.GetMethod("PrivateMethod");
+privateMethod.Invoke(privateClassInstance, null);
+}
+}
+// The private assembly.
+public class PrivateAssembly
+{
+public class PrivateClass
+{
+public void PrivateMethod()
+{
+Console.WriteLine("This is a private method.");
+}
+}
+}
+-----------------------------------------------------------------------------
+--------------------------------------------
+Q2]
+// Teacher.cs
+public class Teacher
+{
+ public int TID { get; set; }
+ public string TName { get; set; }
+ public decimal Salary { get; set; }
+}
+Create a Database Connection Class:
+Create a class named DatabaseHelper to handle database operations.
+// DatabaseHelper.cs
+using System.Data.SQLite;
+public static class DatabaseHelper
+{
+ private const string ConnectionString = "Data Source=:memory:";
+ public static void InitializeDatabase()
+ {
+ using (SQLiteConnection connection = new
+SQLiteConnection(ConnectionString))
+ {
+ connection.Open();
+ // Create Teacher table
+ using (SQLiteCommand command = new SQLiteCommand(
+ "CREATE TABLE Teacher (TID INTEGER PRIMARY KEY, TName TEXT,
+Salary REAL);", connection))
+ {
+ command.ExecuteNonQuery();
+ }
+ // Insert sample data
+ using (SQLiteCommand command = new SQLiteCommand(
+ "INSERT INTO Teacher (TName, Salary) VALUES " +
+ "('John Doe', 50000), ('Jane Smith', 60000), ('Bob Johnson',
+55000), ('Alice Brown', 58000), ('Tom Williams', 52000);",
+ connection))
+ {
+ command.ExecuteNonQuery();
+ }
+ }
+ }
+ public static SQLiteDataAdapter GetDataAdapter()
+ {
+ SQLiteConnection connection = new SQLiteConnection(ConnectionString);
+ connection.Open();
+ return new SQLiteDataAdapter("SELECT * FROM Teacher", connection);
+ }
+}
+Modify Form1.cs to Display Data:
+Open Form1.cs and design your form with a DataGridView control.
+// Form1.cs
+using System;
+using System.Windows.Forms;
+namespace TeacherTableApp
+{
+ public partial class Form1 : Form
+ {
+ public Form1()
+ {
+ InitializeComponent();
+ LoadData();
+ }
+ private void LoadData()
+ {
+ DatabaseHelper.InitializeDatabase();
+ using (SQLiteDataAdapter adapter =
+DatabaseHelper.GetDataAdapter())
+ {
+ var dataTable = new System.Data.DataTable();
+ adapter.Fill(dataTable);
+ dataGridView.DataSource = dataTable;
+ }
+ }
+ }
+}
+Slip no 18
+Q1]
+using System;
+using System.IO;
+class Program
+{
+ static void Main()
+ {
+ Console.Write("Enter the path of the first file: ");
+ string filePath1 = Console.ReadLine();
+ Console.Write("Enter the path of the second file: ");
+ string filePath2 = Console.ReadLine();
+ try
+ {
+ // Read the content of the first file
+ string content1 = ReadFileContent(filePath1);
+ // Read the content of the second file
+ string content2 = ReadFileContent(filePath2);
+ // Compare the content of the two files
+ if (content1.Equals(content2))
+ {
+ Console.WriteLine("The content of the two files is
+identical.");
+ }
+ else
+ {
+ Console.WriteLine("The content of the two files is
+different.");
+ }
+ }
+ catch (FileNotFoundException ex)
+ {
+ Console.WriteLine($"Error: {ex.Message}");
+ }
+ catch (Exception ex)
+ {
+ Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+ }
+ }
+ static string ReadFileContent(string filePath)
+ {
+ using (StreamReader reader = new StreamReader(filePath))
+ {
+ return reader.ReadToEnd();
+ }
+ }
+}
+-----------------------------------------------------------------------------
+-------------------------------------------------
+Q2]
+using System;
+using System.Windows.Forms;
+namespace MultiplicationTableApp
+{
+ public partial class Form1 : Form
+ {
+ public Form1()
+ {
+ InitializeComponent();
+ }
+ private void btnGenerateTable_Click(object sender, EventArgs e)
+ {
+ // Clear the ListBox before displaying the new table
+ listBoxTable.Items.Clear();
+ // Get the number from the user input
+ if (int.TryParse(textBoxNumber.Text, out int number))
+ {
+ // Display the multiplication table in the ListBox
+DisplayMultiplicationTable(number);
+ }
+ else
+ {
+ MessageBox.Show("Please enter a valid integer.");
+ }
+ }
+ private void DisplayMultiplicationTable(int number)
+ {
+ for (int i = 1; i <= 10; i++)
+ {
+ int result = number * i;
+listBoxTable.Items.Add($"{number} x {i} = {result}");
+ }
+ }
+ }
+}
+Slip no 14
+Q1]
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+namespace BlinkingImageApp
+{
+ public partial class Form1 : Form
+ {
+ private Timer timer;
+ private bool isImageVisible = true;
+ public Form1()
+ {
+ InitializeComponent();
+ InitializeTimer();
+ }
+ private void InitializeTimer()
+ {
+ timer = new Timer();
+ timer.Interval = 500; // Set the interval in milliseconds (e.g.,
+500ms for a 0.5-second blink)
+ timer.Tick += Timer_Tick;
+ timer.Start();
+ }
+ private void Timer_Tick(object sender, EventArgs e)
+ {
+ // Toggle the visibility of the image
+ isImageVisible = !isImageVisible;
+ // Redraw the form to update the image visibility
+ Invalidate();
+ }
+ protected override void OnPaint(PaintEventArgs e)
+ {
+ base.OnPaint(e);
+ // Draw the image only if it is visible
+ if (isImageVisible)
+ {
+ // Replace "your_image_path.png" with the actual path to your
+image file
+ Image image = Image.FromFile("your_image_path.png");
+ // Draw the image at a specific location (e.g., 100, 100)
+e.Graphics.DrawImage(image, new Point(100, 100));
+ // Dispose of the image object to release resources
+image.Dispose();
+ }
+ }
+ // Override the OnFormClosing event to stop the timer when the form
+is closed
+ protected override void OnFormClosing(FormClosingEventArgs e)
+ {
+ base.OnFormClosing(e);
+ timer.Stop();
+ }
+ }
+}
+-----------------------------------------------------------------------------
+--------------------------------------------
+Q2]
+using System;
+using System.Data;
+using System.Data.SQLite;
+class Program
+{
+ static void Main()
+ {
+ string connectionString = "Data Source=EmpDatabase.db;Version=3;";
+ // Insert operation
+ InsertEmployee(connectionString, 101, "John Doe", 50000);
+ DisplayEmployeeData(connectionString, "After Insert Operation:");
+ // Update operation
+ UpdateEmployeeSalary(connectionString, 101, 55000);
+ DisplayEmployeeData(connectionString, "After Update Operation:");
+ // Delete operation
+ DeleteEmployee(connectionString, 101);
+ DisplayEmployeeData(connectionString, "After Delete Operation:");
+ }
+ static void InsertEmployee(string connectionString, int ENo, string
+EName, decimal Salary)
+ {
+ using (SQLiteConnection connection = new
+SQLiteConnection(connectionString))
+ {
+ connection.Open();
+ using (SQLiteCommand command = new SQLiteCommand(
+ "INSERT INTO Emp (ENo, EName, Salary) VALUES (@ENo, @EName,
+@Salary)", connection))
+ {
+ command.Parameters.AddWithValue("@ENo", ENo);
+ command.Parameters.AddWithValue("@EName", EName);
+command.Parameters.AddWithValue("@Salary", Salary);
+ command.ExecuteNonQuery();
+ }
+ }
+ Console.WriteLine("Employee Inserted Successfully.");
+ }
+ static void UpdateEmployeeSalary(string connectionString, int ENo,
+decimal newSalary)
+ {
+ using (SQLiteConnection connection = new
+SQLiteConnection(connectionString))
+ {
+ connection.Open();
+ using (SQLiteCommand command = new SQLiteCommand(
+ "UPDATE Emp SET Salary = @Salary WHERE ENo = @ENo",
+connection))
+ {
+ command.Parameters.AddWithValue("@Salary", newSalary);
+command.Parameters.AddWithValue("@ENo", ENo);
+ command.ExecuteNonQuery();
+ }
+ }
+ Console.WriteLine("Employee Salary Updated Successfully.");
+ }
+ static void DeleteEmployee(string connectionString, int ENo)
+ {
+ using (SQLiteConnection connection = new
+SQLiteConnection(connectionString))
+ {
+ connection.Open();
+ using (SQLiteCommand command = new SQLiteCommand(
+ "DELETE FROM Emp WHERE ENo = @ENo", connection))
+ {
+ command.Parameters.AddWithValue("@ENo", ENo);
+ command.ExecuteNonQuery();
+ }
+ }
+ Console.WriteLine("Employee Deleted Successfully.");
+ }
+ static void DisplayEmployeeData(string connectionString, string message)
+ {
+ Console.WriteLine(message);
+ using (SQLiteConnection connection = new
+SQLiteConnection(connectionString))
+ {
+ connection.Open();
+ using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM
+Emp", connection))
+ {
+ using (SQLiteDataReader reader = command.ExecuteReader())
+ {
+ while (reader.Read())
+{
+ Console.WriteLine($"ENo: {reader["ENo"]}, EName:
+{reader["EName"]}, Salary: {reader["Salary"]}");
+ }
+ }
+ }
+ }
+ Console.WriteLine();
+ }
+}
+Slip no 20
+Q1]
+using System;
+class Program
+{
+ static void Main()
+ {
+ Console.WriteLine("Perfect Numbers between 1 and 100:");
+ for (int i = 1; i <= 100; i++)
+ {
+ if (IsPerfectNumber(i))
+ {
+ Console.WriteLine(i);
+ }
+ }
+ }
+ static bool IsPerfectNumber(int number)
+ {
+ int sum = 0;
+ for (int i = 1; i <= number / 2; i++)
+ {
+ if (number % i == 0)
+ {
+ sum += i;
+ }
+ }
+ return sum == number;
+ }
+}
+-----------------------------------------------------------------------------
+----------------------------------------------
+Q2]
+using System;
+class Program
+{
+ static void Main()
+ {
+ Console.Write("Enter the number of rows (M) in the matrix: ");
+ int m = int.Parse(Console.ReadLine());
+ Console.Write("Enter the number of columns (N) in the matrix: ");
+ int n = int.Parse(Console.ReadLine());
+ // Input matrix elements from the user
+ int[,] matrix = InputMatrix(m, n);
+ // Calculate and display the addition of lower triangle elements
+ int lowerTriangleSum = SumLowerTriangle(matrix);
+ Console.WriteLine($"Sum of lower triangle elements:
+{lowerTriangleSum}");
+ // Calculate and display the addition of upper triangle elements
+ int upperTriangleSum = SumUpperTriangle(matrix);
+ Console.WriteLine($"Sum of upper triangle elements:
+{upperTriangleSum}");
+ }
+ static int[,] InputMatrix(int m, int n)
+ {
+ int[,] matrix = new int[m, n];
+ Console.WriteLine("Enter the matrix elements:");
+ for (int i = 0; i < m; i++)
+ {
+ for (int j = 0; j < n; j++)
+ {
+ Console.Write($"Enter element at position [{i + 1}, {j + 1}]:
+");
+ matrix[i, j] = int.Parse(Console.ReadLine());
+ }
+ }
+ return matrix;
+ }
+ static int SumLowerTriangle(int[,] matrix)
+ {
+ int sum = 0;
+ for (int i = 0; i < matrix.GetLength(0); i++)
+ {
+ for (int j = 0; j <= i && j < matrix.GetLength(1); j++)
+ {
+ sum += matrix[i, j];
+ }
+ }
+ return sum;
+ }
+ static int SumUpperTriangle(int[,] matrix)
+ {
+ int sum = 0;
+ for (int i = 0; i < matrix.GetLength(0); i++)
+ {
+ for (int j = i; j < matrix.GetLength(1); j++)
+ {
+ sum += matrix[i, j];
+ }
+ }
+ return sum;
+ }
+}
+Slip no 10
+Q1]
+using System;
+class Program
+{
+ static void Main()
+ {
+ Console.Write("Enter a number to check for Armstrong: ");
+ int number = Convert.ToInt32(Console.ReadLine());
+ if (IsArmstrong(number))
+ {
+ Console.WriteLine($"{number} is an Armstrong number.");
+ }
+ else
+ {
+ Console.WriteLine($"{number} is not an Armstrong number.");
+ }
+ }
+ // Function to check if a number is Armstrong
+ static bool IsArmstrong(int num)
+ {
+ int originalNum = num;
+ int sum = 0;
+ int numDigits = CountDigits(num);
+ while (num > 0)
+ {
+ int digit = num % 10;
+ sum += (int)Math.Pow(digit, numDigits);
+ num /= 10;
+ }
+ return sum == originalNum;
+ }
+ // Function to count the number of digits in a number
+ static int CountDigits(int num)
+ {
+ int count = 0;
+ while (num > 0)
+ {
+ num /= 10;
+ count++;
+ }
+ return count;
+ }
+}
+-----------------------------------------------------------------------------
+---------------------------------------
+Q2]
+using System;
+using System.Windows.Forms;
+namespace PalindromeCheckerApp
+{
+ public partial class MainForm : Form
+ {
+ public MainForm()
+ {
+ InitializeComponent();
+ }
+ private void CheckPalindromeButton_Click(object sender, EventArgs e)
+ {
+ // Get the number entered by the user from the TextBox
+ string userInput = NumberTextBox.Text;
+ // Check if the entered number is a palindrome
+ bool isPalindrome = IsPalindrome(userInput);
+ // Display the result on the Label
+ if (isPalindrome)
+ {
+ ResultLabel.Text = $"{userInput} is a palindrome!";
+ }
+ else
+ {
+ ResultLabel.Text = $"{userInput} is not a palindrome.";
+ }
+ }
+ // Function to check if a string is a palindrome
+ private bool IsPalindrome(string str)
+ {
+ // Convert the string to lowercase for case-insensitive
+comparison
+ str = str.ToLower();
+ int left = 0;
+ int right = str.Length - 1;
+ while (left < right)
+ {
+ if (str[left] != str[right])
+ {
+ return false;
+ }
+ left++;
+ right--;
+ }
+ return true;
+ }
+ }
+}
+Slip no 16
+Q1]
+using System;
+class Program
+{
+ static void Main()
+ {
+ try
+ {
+ Console.Write("Enter a numeric integer between 0 and 1000: ");
+ int userInput = int.Parse(Console.ReadLine());
+ if (userInput < 0 || userInput > 1000)
+ {
+ throw new ArgumentOutOfRangeException("Number must be between
+0 and 1000.");
+ }
+ Console.WriteLine("Entered number is valid.");
+ }
+ catch (FormatException)
+ {
+ Console.WriteLine("Error: Please enter a valid numeric
+integer.");
+ }
+ catch (ArgumentOutOfRangeException ex)
+ {
+ Console.WriteLine($"Error: {ex.Message}");
+ }
+ catch (Exception ex)
+ {
+ Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+ }
+ }
+}
+-----------------------------------------------------------------------------
+-----------------------------------------
+Q2]
+using System;
+class Employee
+{
+ public string Name { get; set; }
+ public int EmployeeId { get; set; }
+ public virtual void Display()
+ {
+ Console.WriteLine($"Employee ID: {EmployeeId}");
+ Console.WriteLine($"Employee Name: {Name}");
+ }
+}
+class Programmer : Employee
+{
+ public string ProgrammingLanguage { get; set; }
+ public override void Display()
+ {
+ base.Display(); // Call the base class Display method
+ Console.WriteLine($"Programming Language: {ProgrammingLanguage}");
+ }
+}
+class Manager : Employee
+{
+ public string Department { get; set; }
+ public override void Display()
+ {
+ base.Display(); // Call the base class Display method
+ Console.WriteLine($"Department: {Department}");
+ }
+}
+class Program
+{
+ static void Main()
+ {
+ Programmer programmer = new Programmer
+ {
+ EmployeeId = 101,
+ Name = "John Doe",
+ ProgrammingLanguage = "C#"
+ };
+ Manager manager = new Manager
+ {
+ EmployeeId = 102,
+ Name = "Jane Smith",
+ Department = "IT"
+ };
+ Console.WriteLine("Programmer Information:");
+ programmer.Display();
+ Console.WriteLine("\nManager Information:");
+ manager.Display();
+ }
+}
+Slip no 5
+Q1]
+using System;
+class Program
+{
+ static void Main()
+ {
+ // Example array
+ int[] numbers = { 23, 45, 67, 12, 89, 34, 56, 78 };
+ int largestNumber = FindLargestNumber(numbers);
+ Console.WriteLine($"The largest number in the array is:
+{largestNumber}");
+ }
+ static int FindLargestNumber(int[] array)
+ {
+ if (array == null || array.Length == 0)
+ {
+ throw new ArgumentException("Array should not be null or
+empty.");
+ }
+ int largest = array[0]; // Assume the first element is the largest
+ for (int i = 1; i < array.Length; i++)
+ {
+ if (array[i] > largest)
+ {
+ largest = array[i];
+ }
+ }
+ return largest;
+ }
+}
+OUTPUT:-
+The largest number in the array is: 89
+-----------------------------------------------------------------------------
+--------------------------------------------------
+Q2]
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+namespace ColorPickerApp
+{
+ public partial class ColorPickerControl : UserControl
+ {
+ private ListBox colorListBox;
+ public Color SelectedColor
+ {
+ get
+ {
+ if (colorListBox.SelectedItem != null)
+{
+ return (Color)colorListBox.SelectedItem;
+ }
+return Color.Black; // Default color if none selected
+ }
+ }
+ public ColorPickerControl()
+ {
+ InitializeComponent();
+ InitializeColorList();
+ }
+ private void InitializeColorList()
+ {
+ colorListBox = new ListBox();
+ colorListBox.Dock = DockStyle.Fill;
+ // Add some colors to the list
+ colorListBox.Items.Add(Color.Red);
+ colorListBox.Items.Add(Color.Green);
+ colorListBox.Items.Add(Color.Blue);
+ colorListBox.Items.Add(Color.Yellow);
+ colorListBox.Items.Add(Color.Orange);
+ colorListBox.Items.Add(Color.Purple);
+ this.Controls.Add(colorListBox);
+ }
+ }
+ public partial class MainForm : Form
+ {
+ private ColorPickerControl colorPickerControl;
+ private Button changeColorButton;
+ public MainForm()
+ {
+ InitializeComponents();
+ }
+ private void InitializeComponents()
+ {
+ this.Text = "Color Picker App";
+ this.Size = new System.Drawing.Size(300, 200);
+ this.FormBorderStyle = FormBorderStyle.FixedSingle;
+ colorPickerControl = new ColorPickerControl();
+ colorPickerControl.Dock = DockStyle.Left;
+ changeColorButton = new Button();
+ changeColorButton.Text = "Change Color";
+ changeColorButton.Dock = DockStyle.Bottom;
+ changeColorButton.Click += ChangeColorButton_Click;
+ this.Controls.Add(colorPickerControl);
+ this.Controls.Add(changeColorButton);
+ }
+ private void ChangeColorButton_Click(object sender, EventArgs e)
+ {
+ this.BackColor = colorPickerControl.SelectedColor;
+ }
+ [STAThread]
+ static void Main()
+ {
+ Application.EnableVisualStyles();
+ Application.SetCompatibleTextRenderingDefault(false);
+ Application.Run(new MainForm());
+ }
+ }
+}
